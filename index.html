@@ -16,6 +16,7 @@
       padding: 10px 15%;
       font-family: sans-serif;
       font-size: 18px;
+      justify-content: center;
     }
 
     @media (max-width: 900px) {
@@ -86,21 +87,18 @@
         if (jlpt4.includes(k)) {
           classes.push('jlpt4')
           if (!my.includes(k)) {
-            console.log(k);
             classes.push('focus')
           }
         }
         if (jlpt3.includes(k)) {
           classes.push('jlpt3')
           if (!my.includes(k)) {
-            console.log(k);
             classes.push('focus2')
           }
         }
         if (jlpt2.includes(k)) {
           classes.push('jlpt2')
           if (!my.includes(k)) {
-            console.log(k);
             classes.push('focus3')
           }
         }
