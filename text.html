@@ -1,0 +1,21 @@
+<html>
+
+<head>
+  <title>Test</title>
+  <meta charset="UTF-8">
+  <script>
+
+    var myKanji = 'kanji-list-my-known.txt'
+    var request = new XMLHttpRequest();
+    request.open('GET', myKanji, true);
+    request.onload = function () {
+      console.log(request.responseText);
+    };
+    request.send();
+  </script>
+</head>
+
+<body>
+</body>
+
+</html>
