@@ -5,10 +5,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <meta charset="UTF-8">
   <script src="data.js"></script>
-  <script src="jlpt5.js"></script>
-  <script src="jlpt4.js"></script>
-  <script src="jlpt3.js"></script>
-  <script src="jlpt2.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -16,38 +12,16 @@
   <script>
     function buildTree(myKanjiSource) {
       const my = JSON.stringify(myKanjiSource.split('\n'));
-      const jlpt5 = JSON.parse(localStorage.getItem('jlpt5'));
-      const jlpt4 = JSON.parse(localStorage.getItem('jlpt4'));
-      const jlpt3 = JSON.parse(localStorage.getItem('jlpt3'));
-      const jlpt2 = JSON.parse(localStorage.getItem('jlpt2'));
       JSON.parse(localStorage.getItem('joyouKanjiAll')).forEach(k => {
         let classes = [];
-        if (my.includes(k)) {
+        classes.push('level' + k.l);
+        if (my.includes(k.k)) {
           classes.push('joyou_known')
-        }
-        if (jlpt5.includes(k)) {
-          classes.push('jlpt5')
-        }
-        if (jlpt4.includes(k)) {
-          classes.push('jlpt4')
-          if (!my.includes(k)) {
-            classes.push('focus')
-          }
-        }
-        if (jlpt3.includes(k)) {
-          classes.push('jlpt3')
-          if (!my.includes(k)) {
-            classes.push('focus2')
-          }
-        }
-        if (jlpt2.includes(k)) {
-          classes.push('jlpt2')
-          if (!my.includes(k)) {
-            classes.push('focus3')
-          }
+        } else {
+          classes.push('focus' + k.l)
         }
         document.body.insertAdjacentHTML('beforeend', `
-            <div class="joyou ${classes.join(' ')}">${k}</div>
+            <div class="joyou ${classes.join(' ')}">${k.k}</div>
           `)
       });
     }

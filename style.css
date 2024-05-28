@@ -25,31 +25,35 @@ body {
   background: rgb(245, 230, 240);
 }
 
-.focus {
-  box-shadow: inset -0 0 0 1px rgba(0, 224, 0, 0.952);
+.focus1 {
+  box-shadow: inset -0 0 0 2px rgba(255, 196, 0, 0.952);
 }
 
 .focus2 {
-  box-shadow: inset -0 0 0 1px rgba(207, 0, 104, 0.637);
+  box-shadow: inset -0 0 0 1px rgba(0, 224, 0, 0.952);
 }
 
 .focus3 {
+  box-shadow: inset -0 0 0 1px rgba(207, 0, 104, 0.637);
+}
+
+.focus4 {
   box-shadow: inset 0 0 0 1px rgba(0, 31, 207, 0.527);
 }
 
-.jlpt5 {
+.level1 {
   color: rgb(226, 136, 0);
   font-size: bold;
 }
 
-.jlpt4 {
+.level2 {
   color: green;
 }
 
-.jlpt3 {
+.level3 {
   color: rgb(168, 0, 42);
 }
 
-.jlpt2 {
+.level4 {
   color: rgb(105, 130, 214);
 }
