@@ -25,20 +25,20 @@ body {
   background: rgb(245, 230, 240);
 }
 
-.focus1 {
+.focus5 {
   box-shadow: inset -0 0 0 2px rgba(255, 196, 0, 0.952);
 }
 
-.focus2 {
-  box-shadow: inset -0 0 0 1px rgba(0, 224, 0, 0.952);
+.focus4 {
+  box-shadow: inset -0 0 0 2px rgba(120, 226, 120, 0.952);
 }
 
 .focus3 {
-  box-shadow: inset -0 0 0 1px rgba(207, 0, 104, 0.637);
+  box-shadow: inset -0 0 0 2px rgba(207, 0, 104, 0.637);
 }
 
-.focus4 {
-  box-shadow: inset 0 0 0 1px rgba(0, 31, 207, 0.527);
+.focus2 {
+  box-shadow: inset 0 0 0 2px rgba(0, 31, 207, 0.527);
 }
 
 .level1 {
@@ -56,4 +56,45 @@ body {
 
 .level4 {
   color: rgb(105, 130, 214);
+}
+
+.level5 {
+  color:rgb(86, 100, 146);
+}
+
+.level6 {
+  color:rgb(100, 86, 109);
+}
+
+.jlpt4, .jlpt3, .jlpt2, .jlpt1 {
+  position: relative;
+}
+
+.jlpt4:before, .jlpt3:before, .jlpt2:before, .jlpt1:before {
+  content: '';
+  position: absolute;
+  width:6px;
+  height:6px;
+  border-bottom-left-radius: 5px;
+  top: 0;
+  right: 0;
+  z-index: 100;
+}
+
+.jlpt4:before {
+  background: green;
+}
+
+.jlpt3:before {
+  background: rgb(168, 0, 42);
+}
+
+.jlpt2:before {
+  background: rgb(105, 130, 214);
+}
+
+.jlpt1:before {
+  background: rgb(158, 158, 158);
+  top: -1px;
+  right: -1px;
 }

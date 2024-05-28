@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <meta charset="UTF-8">
   <script src="data.js"></script>
+  <script src="jlpt3.js"></script>
+  <script src="jlpt2.js"></script>
+  <script src="jlpt4.js"></script>
+  <script src="jlpt1.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -12,13 +16,26 @@
   <script>
     function buildTree(myKanjiSource) {
       const my = JSON.stringify(myKanjiSource.split('\n'));
+      const levels = {
+        jlpt3 : JSON.parse(localStorage.getItem('jlpt3')),
+        jlpt2 : JSON.parse(localStorage.getItem('jlpt2')),
+        jlpt4 : JSON.parse(localStorage.getItem('jlpt4')),
+        jlpt1 : JSON.parse(localStorage.getItem('jlpt1'))
+      }
       JSON.parse(localStorage.getItem('joyouKanjiAll')).forEach(k => {
         let classes = [];
         classes.push('level' + k.l);
+        let currentLevel = '';
+        Object.keys(levels).forEach(level => {
+          if (levels[level].includes(k.k)) {
+            currentLevel = level
+            classes.push(currentLevel);
+          }
+        })
         if (my.includes(k.k)) {
           classes.push('joyou_known')
         } else {
-          classes.push('focus' + k.l)
+          classes.push('focus' + currentLevel.substr(-1));
         }
         document.body.insertAdjacentHTML('beforeend', `
             <div class="joyou ${classes.join(' ')}">${k.k}</div>
