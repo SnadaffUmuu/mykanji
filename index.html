@@ -25,11 +25,13 @@
       JSON.parse(localStorage.getItem('joyouKanjiAll')).forEach(k => {
         let classes = [];
         classes.push('level' + k.l);
+        let title = 'level' + k.l;
         let currentLevel = '';
         Object.keys(levels).forEach(level => {
           if (levels[level].includes(k.k)) {
             currentLevel = level
             classes.push(currentLevel);
+            title += ' ' + currentLevel
           }
         })
         if (my.includes(k.k)) {
@@ -38,7 +40,7 @@
           classes.push('focus' + currentLevel.substr(-1));
         }
         document.body.insertAdjacentHTML('beforeend', `
-            <div class="joyou ${classes.join(' ')}">${k.k}</div>
+            <div class="joyou ${classes.join(' ')}" title="${title}">${k.k}</div>
           `)
       });
     }
