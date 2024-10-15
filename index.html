@@ -13,7 +13,18 @@
 </head>
 
 <body>
+  <div id="nonjoyou"></div>
   <script>
+    function buildNonjoyou(source) {
+      const request = new XMLHttpRequest();
+      request.open('GET', 'kanji-list-my-nonjoyou.txt', true);
+      request.onload = function () {
+        if (request.responseText) {
+          request.responseText.split('\n').forEach(o => document.body.insertAdjacentHTML('beforeend', `<div class="nonjoyou">${o}</div>`))
+        }
+      };
+      request.send();
+    }
     function buildTree(myKanjiSource) {
       const my = JSON.stringify(myKanjiSource.split('\n'));
       const levels = {
@@ -42,7 +53,8 @@
         document.body.insertAdjacentHTML('beforeend', `
             <div class="joyou ${classes.join(' ')}" title="${title}">${k.k}</div>
           `)
-      });
+      })
+
     }
     const myKanjiSource = null;
     const request = new XMLHttpRequest();
@@ -53,6 +65,7 @@
       }
     };
     request.send();
+    buildNonjoyou();
   </script>
 </body>
 
