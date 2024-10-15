@@ -13,27 +13,38 @@
 </head>
 
 <body>
-  <div id="nonjoyou"></div>
+  <div id="result"></div>
   <script>
-    function buildNonjoyou(source) {
+    let allLength, myLength, nonjoyouLength;
+    const buildNonjoyou = (source) => {
       const request = new XMLHttpRequest();
       request.open('GET', 'kanji-list-my-nonjoyou.txt', true);
       request.onload = function () {
         if (request.responseText) {
-          request.responseText.split('\n').forEach(o => document.body.insertAdjacentHTML('beforeend', `<div class="nonjoyou">${o}</div>`))
+          const nonjoyou = request.responseText.split('\n');
+          nonjoyouLength = nonjoyou.length;
+          nonjoyou.forEach(o => document.body.insertAdjacentHTML('beforeend', `<div class="nonjoyou">${o}</div>`))
+          document.getElementById('result').insertAdjacentHTML('afterbegin', `
+          Joyou: ${myLength} - <span id="result-accent">${Math.floor(myLength / allLength * 100)}%</span>; Non-joyou: ${nonjoyouLength}
+          `)
         }
       };
       request.send();
     }
-    function buildTree(myKanjiSource) {
-      const my = JSON.stringify(myKanjiSource.split('\n'));
+
+    const buildTree = (myKanjiSource) => {
+      const myKanjiList = myKanjiSource.split('\n');
+      myLength = myKanjiList.length;
+      const my = JSON.stringify(myKanjiList);
       const levels = {
-        jlpt3 : JSON.parse(localStorage.getItem('jlpt3')),
-        jlpt2 : JSON.parse(localStorage.getItem('jlpt2')),
-        jlpt4 : JSON.parse(localStorage.getItem('jlpt4')),
-        jlpt1 : JSON.parse(localStorage.getItem('jlpt1'))
+        jlpt3: JSON.parse(localStorage.getItem('jlpt3')),
+        jlpt2: JSON.parse(localStorage.getItem('jlpt2')),
+        jlpt4: JSON.parse(localStorage.getItem('jlpt4')),
+        jlpt1: JSON.parse(localStorage.getItem('jlpt1'))
       }
-      JSON.parse(localStorage.getItem('joyouKanjiAll')).forEach(k => {
+      const all = JSON.parse(localStorage.getItem('joyouKanjiAll'));
+      allLength = all.length;
+      all.forEach(k => {
         let classes = [];
         classes.push('level' + k.l);
         let title = 'level' + k.l;
@@ -54,7 +65,7 @@
             <div class="joyou ${classes.join(' ')}" title="${title}">${k.k}</div>
           `)
       })
-
+      buildNonjoyou();
     }
     const myKanjiSource = null;
     const request = new XMLHttpRequest();
@@ -65,7 +76,6 @@
       }
     };
     request.send();
-    buildNonjoyou();
   </script>
 </body>
 

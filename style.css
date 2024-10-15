@@ -1,7 +1,7 @@
 body {
   display: flex;
   flex-flow: row wrap;
-  padding: 10px 15%;
+  padding: 20px 15%;
   font-family: sans-serif;
   font-size: 18px;
   justify-content: center;
@@ -9,8 +9,28 @@ body {
 
 @media (max-width: 900px) {
   body {
-    padding: 5px;
+    padding: 20px 5px 5px;
   }
+}
+
+#result {
+  position: fixed;
+  top: 5px;
+  height:15px;
+  padding:7px 10px 15px;
+  border: 3px solid #bdc7ff;
+  border-radius: 5px;
+  color: #999;
+  font-size:small;
+  align-self:flex-start;
+  background: white;
+  z-index: 1000;
+}
+
+#result-accent {
+  color:rgb(155, 0, 0);
+  font-weight: bold;
+  font-size: large;
 }
 
 .joyou, .nonjoyou {
