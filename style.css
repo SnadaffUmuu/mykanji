@@ -1,7 +1,7 @@
 body {
   display: flex;
   flex-flow: row wrap;
-  padding: 20px 15%;
+  padding: 38px 15%;
   font-family: sans-serif;
   font-size: 18px;
   justify-content: center;
@@ -15,9 +15,8 @@ body {
 
 #result {
   position: fixed;
-  top: 5px;
-  height:15px;
-  padding:7px 10px 15px;
+  top: 0;
+  padding:10px;
   border: 3px solid #bdc7ff;
   border-radius: 5px;
   color: #999;
