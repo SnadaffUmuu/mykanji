@@ -23,9 +23,11 @@
         if (request.responseText) {
           const nonjoyou = request.responseText.split('\n');
           nonjoyouLength = nonjoyou.length;
+          const currentPercent = Math.floor(myLength / allLength * 100);
+          const remainsToNext = Math.ceil(allLength * (currentPercent + 1)/ 100) - myLength
           nonjoyou.forEach(o => document.body.insertAdjacentHTML('beforeend', `<div class="nonjoyou">${o}</div>`))
           document.getElementById('result').insertAdjacentHTML('afterbegin', `
-          Joyou: ${myLength} - <span id="result-accent">${Math.floor(myLength / allLength * 100)}%</span>; Non-joyou: ${nonjoyouLength}
+          Joyou: ${myLength} - <span id="result-accent">${currentPercent}%</span> (${remainsToNext} до ${currentPercent + 1}%); Non-joyou: ${nonjoyouLength}
           `)
         }
       };
