@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Review</title>
+  <style>
+    #res {
+      display: flex;
+      flex-flow: column nowrap;
+      align-items: flex-start;
+    }
+
+    .card-inner:not(.current),
+    .nextside:not(.current) {
+      display: none;
+    }
+
+    .card {
+      padding: 10px 10px 35px;
+      border: 1px solid pink;
+      position: relative;
+    }
+
+    .nextside {
+      position: absolute;
+      bottom: 3px;
+      background: white;
+      border: 1px solid plum;
+      padding: 3px;
+    }
+  </style>
+  <script type="module">
+    const shuffleArray = array => {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+      }
+      return array;
+    }
+
+    function rotate(el) {
+      el.classList.remove('current');
+      el.previousElementSibling.classList.remove('current');
+      el.nextElementSibling.classList.add('current');
+      if (el.nextElementSibling.nextElementSibling) {
+       el.nextElementSibling.nextElementSibling.classList.add('current')
+      }
+    }
+
+    const text = `[22]
+
+てすと
+тест
+
+全て
+すべて
+все
+
+[23]
+
+違和感
+いわかん
+чувство`;
+
+    function parseResults(text) {
+      const entries = text.split('\n\n').filter(o => !o.startsWith('[')).map(entry => entry.split('\n').filter(l => l.trim().replaceAll('\n', '').length));
+      const container = document.getElementById('res');
+      console.log(entries)
+      shuffleArray(entries).forEach((entry, i) => {
+        const sides = shuffleArray(entry).map(s => `<div class="card-inner" data-index="${i}">${s}</div>`).join(`<div class="nextside" data-index="${i}">next</div>`);
+        container.insertAdjacentHTML('beforeend', `
+            <div class="card">
+              ${sides}
+            </div>
+            `);
+        container.querySelector(`.card-inner[data-index="${i}"]`).classList.add('current');
+        container.querySelector(`.nextside[data-index="${i}"]`).classList.add('current');
+
+        Array.from(document.querySelectorAll('.nextside')).forEach(el => {
+          el.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            rotate(e.target);
+          })
+        })
+      })
+    }
+
+    if (document.readyState !== 'loading') {
+      //parseResults(text);
+      document.getElementById('myfile').addEventListener('change', function () {
+        const fileReader = new FileReader();
+        let res = '';
+        fileReader.onload = function () {
+          res = fileReader.result;
+          console.log(res)
+          parseResults(res)
+        }
+        fileReader.readAsText(this.files[0]);
+      })
+    }
+  </script>
+</head>
+
+<body>
+  <form enctype="multipart/form-data">
+    <input type="file" id="myfile">
+  </form>
+  <div id="res">
+
+  </div>
+</body>
+
+</html>

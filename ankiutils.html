@@ -27,7 +27,7 @@
     }
 
     #total {
-      font-weight:bold
+      font-weight: bold
     }
   </style>
   <script type="module">
@@ -35,6 +35,7 @@
     const queries = {
       kanjiDecks: 'deck:KanjiNew or deck:Kanji',
       unmarkedCandidates: 'deck:jp1 and WriteFlag: and -is:suspended and -is:new and -is:learn and -tag:notwrite',
+      katakana : 'deck:jp1 and WriteFlag: and -is:suspended and -is:new and -is:learn and -tag:notwrite and Kanji:',
       candidates: 'tag:writecandidate',
     };
 
@@ -87,6 +88,10 @@
         (ch >= "㐀" && ch <= "䶿");
     }
 
+    function isKatakana(ch) {
+      return ch >= "゠" && ch <= "・"
+    }
+
     function getOnlyKanji(str) {
       const res = new Set(Array.from(str).filter(ch => isKanji(ch)))
       return res.size ? res : null;
@@ -105,81 +110,96 @@
       let knownKanji = await invoke('notesInfo', 6, { "notes": knownKanjiCards });
       knownKanji = new Set(knownKanji.map(o => o.fields.Kanji.value))
       const mainNotes = await invoke('findNotes', 6, { "query": queries.unmarkedCandidates })
-      const rrr = await invoke('notesInfo', 6, { "notes": mainNotes });
-      const result = rrr.filter(n => {
+      const info = await invoke('notesInfo', 6, { "notes": mainNotes });
+      return info.filter(n => {
         const res = new Set(Array.from(n.fields.Kanji.value));
         if (res.size <= 1) return false;
         const onlyKanji = getOnlyKanji(res);
         if (onlyKanji == null) return false;
         if (onlyKanji.isSubsetOf(knownKanji)) return true;
         return false;
-      })
-      return result;
+      });
+    }
+
+    async function fetchKatakana() {
+      const mainNotes = await invoke('findNotes', 6, { "query": queries.katakana })
+      const info = await invoke('notesInfo', 6, { "notes": mainNotes });
+      return info.filter(n => {
+        return Array.from(n.fields.Kana.value).filter(ch => isKatakana(ch)).length
+      });
     }
 
     const delayBetweenRequests = 100;
 
     function init() {
       if (document.readyState !== 'loading') {
-        fetchTableData().then(result => {
-          document.getElementById('total').innerHTML = result.length;
-          makeTable(result);
-          document.getElementById('addtag').addEventListener('click', (e) => {
-            e.preventDefault()
-            invoke('addTags', 6, {
-              "notes": Array.from(document.querySelectorAll('input:checked')).map(o => parseInt(o.dataset.checkNoteId)),
-              "tags": document.getElementById('action-data').value
-            }).then(
-              window.location.reload()
-            )
-          })
-          document.getElementById('removetag').addEventListener('click', (e) => {
-            e.preventDefault()
-            invoke('removeTags', 6, {
-              "notes": Array.from(document.querySelectorAll('input:checked')).map(o => parseInt(o.dataset.checkNoteId)),
-              "tags": document.getElementById('action-data').value
-            }).then(
-              window.location.reload()
-            )
-          })
-          document.getElementById('setnotwrite').addEventListener('click', (e) => {
-            e.preventDefault()
-            invoke('replaceTags', 6, {
-              "notes": Array.from(document.querySelectorAll('input:checked')).map(o => parseInt(o.dataset.checkNoteId)),
-              "tag_to_replace": "writecandidate",
-              "replace_with_tag": "notwrite"
-            }).then(
-              window.location.reload()
-            )
-          })
-          document.getElementById('settowrite').addEventListener('click', (e) => {
-            e.preventDefault();
 
-            let promises = [];
+        document.getElementById('fetchKatakana').addEventListener('click', (e) => {
+          e.preventDefault()
+          fetchKatakana().then(result => {
+            document.getElementById('total').innerHTML = result.length;
+            makeTable(result);
+          })
+        })
 
-            const checked = Array.from(document.querySelectorAll('input:checked')).map(o => parseInt(o.dataset.checkNoteId));
+        document.getElementById('fetch').addEventListener('click', (e) => {
+          e.preventDefault()
+          fetchTableData().then(result => {
+            document.getElementById('total').innerHTML = result.length;
+            makeTable(result);
+          })
+        })
 
-            checked.forEach((id, index) => {
-              const delay = index * delayBetweenRequests;
-              promises.push(delayedInvoke(delay, 'updateNoteFields', 6, {
-                "note": {
-                  "id": id,
-                  "fields": {
-                    "WriteFlag": "1"
-                  }
+        document.getElementById('settowrite').addEventListener('click', (e) => {
+          e.preventDefault();
+          let promises = [];
+          const checked = Array.from(document.querySelectorAll('input:checked')).map(o => parseInt(o.dataset.checkNoteId));
+          checked.forEach((id, index) => {
+            const delay = index * delayBetweenRequests;
+            promises.push(delayedInvoke(delay, 'updateNoteFields', 6, {
+              "note": {
+                "id": id,
+                "fields": {
+                  "WriteFlag": "1"
                 }
-              }))
-            });
-
-            Promise.all(promises).then(
-              invoke('removeTags', 6, {
-                "notes": checked,
-                "tags": "writecandidate"
-              }).then(
-                console.log('reload')
-                //window.location.reload()
-              )
+              }
+            }))
+          });
+          Promise.all(promises).then(
+            invoke('removeTags', 6, {
+              "notes": checked,
+              "tags": "writecandidate"
+            }).then(
+              console.log('reload')
             )
+          )
+        })
+
+        document.getElementById('addtag').addEventListener('click', (e) => {
+          e.preventDefault()
+          invoke('addTags', 6, {
+            "notes": Array.from(document.querySelectorAll('input:checked')).map(o => parseInt(o.dataset.checkNoteId)),
+            "tags": document.getElementById('action-data').value
+          })
+        })
+
+        document.getElementById('removetag').addEventListener('click', (e) => {
+          e.preventDefault()
+          invoke('removeTags', 6, {
+            "notes": Array.from(document.querySelectorAll('input:checked')).map(o => parseInt(o.dataset.checkNoteId)),
+            "tags": document.getElementById('action-data').value
+          })
+        })
+
+        document.getElementById('setnotwrite').addEventListener('click', (e) => {
+          e.preventDefault()
+          invoke('addTags', 6, {
+            "notes": Array.from(document.querySelectorAll('input:checked')).map(o => parseInt(o.dataset.checkNoteId)),
+            "tags": "notwrite"
+          })
+          invoke('removeTags', 6, {
+            "notes": Array.from(document.querySelectorAll('input:checked')).map(o => parseInt(o.dataset.checkNoteId)),
+            "tags": "writecandidate"
           })
         })
       }
@@ -220,6 +240,9 @@
 
 <body>
   <div id="actionbar">
+    <button id="fetch">fetch notes</button>
+    <button id="fetchKatakana">fetch katakana notes</button>
+    <br>
     <button id="addtag">add tag</button>
     <button id="removetag">remove tag</button>
     <button id="settowrite">set to write</button>
