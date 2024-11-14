@@ -29,6 +29,9 @@
           document.getElementById('result').insertAdjacentHTML('afterbegin', `
           Joyou: ${myLength} - <span id="result-accent">${currentPercent}%</span> (${remainsToNext} до ${currentPercent + 1}%); Non-joyou: ${nonjoyouLength}
           `)
+          console.log('total: ' + allLength);
+          console.log('myLength: ' + myLength);
+          console.log('cards for percent: ' + (allLength/100));
         }
       };
       request.send();
