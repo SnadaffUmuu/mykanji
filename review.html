@@ -139,7 +139,7 @@
 
 
     function entriesFilter(entryStr) {
-      return !entryStr.startsWith('[') && !exclude.find(s => entryStr.startsWith(s))
+      return !entryStr.startsWith('[') && !exclude.find(s => entryStr.indexOf(s) >= 0)
     }
 
     function parseResults(text) {
