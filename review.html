@@ -90,7 +90,7 @@
     }
 
     function isForReading(str) {
-      return !Array.from(str).some(ch => !isHiraganaCharacter(ch) && !isKatakana(ch))
+      return !Array.from(str.trim()).some(ch => !isHiraganaCharacter(ch) && !isKatakana(ch))
     }
 
     const exclude = [
