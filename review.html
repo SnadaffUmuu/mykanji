@@ -86,11 +86,11 @@
     }
 
     function isHiraganaCharacter(ch) {
-      return kanaExcl.contains(ch) || (ch >= "぀" && ch <= "ゟ")
+      return kanaExcl.includes(ch) || (ch >= "぀" && ch <= "ゟ")
     }
 
     function isKatakana(ch) {
-      return kanaExcl.contains(ch) || (ch >= "゠" && ch <= "・")
+      return kanaExcl.includes(ch) || (ch >= "゠" && ch <= "・")
     }
 
     function isForReading(str) {
