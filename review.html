@@ -72,6 +72,10 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/keen-slider@6.8.5/keen-slider.min.css" />
   <script>
 
+    const kanaExcl = [
+      '〜'
+    ];
+
     function speak(el) {
       if (el.dataset && el.dataset.reading) {
         console.log('speak')
@@ -82,11 +86,11 @@
     }
 
     function isHiraganaCharacter(ch) {
-      return (ch >= "぀" && ch <= "ゟ")
+      return kanaExcl.contains(ch) || (ch >= "぀" && ch <= "ゟ")
     }
 
     function isKatakana(ch) {
-      return ch >= "゠" && ch <= "・"
+      return kanaExcl.contains(ch) || (ch >= "゠" && ch <= "・")
     }
 
     function isForReading(str) {
