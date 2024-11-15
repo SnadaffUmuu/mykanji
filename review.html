@@ -144,7 +144,14 @@
 
     function parseResults(text) {
       let entries = text.split('\n\n').filter(o => entriesFilter(o)).map(entry =>
-        entry.replaceAll('✔', '').split('\n').filter(l => l.trim().replaceAll('\n', '').length));
+        entry.replaceAll('✔', '').split('\n').filter(l => {
+          return (
+            !l.startsWith('?')
+            && !l.startsWith('？')  
+            && !l.startsWith('::') 
+            && l.trim().replaceAll('\n', '').length
+          )
+        }));
       entries = entries.filter(a => a.length);
       console.log('total', entries.length)
       console.log(entries)
