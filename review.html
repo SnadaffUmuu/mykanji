@@ -114,15 +114,12 @@
     function rotate(el) {
       const slide = el.classList.contains('slide-inner') ? el : el.closest('.slide-inner');
       const current = slide.querySelector('.current');
-      if (current.nextElementSibling) {
+      if (current && current.nextElementSibling) {
         current.nextElementSibling.classList.add('current');
       } else {
         slide.querySelector('.card-inner').classList.add('current');
       }
       current.classList.remove('current');
-      setTimeout(() => {
-        //speak(slide.querySelector('.current'))
-      }, 0)
     }
 
     const text = `[22]
@@ -173,7 +170,6 @@
         el.addEventListener('click', (e) => {
           e.stopPropagation();
           e.preventDefault();
-          //console.log('click', e)
           rotate(e.target);
         })
       })
