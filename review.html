@@ -80,8 +80,9 @@
     function speak(el) {
       if (el.dataset && el.dataset.reading) {
         console.log('speak')
+
         const utterThis = new SpeechSynthesisUtterance(el.dataset.reading);
-        utterThis.lang = "ja-JA";
+        utterThis.lang = "ja";
         window.speechSynthesis.speak(utterThis);
       }
     }
